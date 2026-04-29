@@ -1,0 +1,28 @@
+# Build outputs
+target/
+*.class
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.idea/
+.vscode/
+*.iml
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Docker/local runtime state
+.docker/
+docker-compose.override.yml
+
+# Tool-generated local upgrade artifacts
+.github/java-upgrade/
