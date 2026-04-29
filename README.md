@@ -349,6 +349,12 @@ console.log(data.result);
 docs/RENDER_DEPLOYMENT.md
 ```
 
+前端调用接口指南见：
+
+```text
+docs/FRONTEND_INTEGRATION_GUIDE.md
+```
+
 项目已经包含 Docker 部署文件：
 
 - `Dockerfile`：使用 Maven + JDK 17 构建，再用 JRE 17 运行 Spring Boot jar。
