@@ -74,6 +74,44 @@ src/main/resources/application.yml
 http://localhost:8080
 ```
 
+## 线上服务
+
+当前 Render Web Service 已部署：
+
+```text
+https://java-formula-simplifier-service.onrender.com
+```
+
+线上健康检查：
+
+```bash
+curl https://java-formula-simplifier-service.onrender.com/api/v1/health
+```
+
+预期响应：
+
+```json
+{"status":"UP"}
+```
+
+线上表达式化简测试：
+
+```bash
+curl -X POST https://java-formula-simplifier-service.onrender.com/api/v1/simplify \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "normalFunctions": ["f(x,y)=x+y"],
+    "recursiveFunctions": [],
+    "expression": "f(x,2)"
+  }'
+```
+
+预期响应：
+
+```json
+{"result":"x+2"}
+```
+
 ## 健康检查
 
 ```bash
@@ -280,10 +318,14 @@ String result = service.simplify("""
 CORS_ALLOWED_ORIGINS=https://your-frontend.example.com,https://your-preview.example.com
 ```
 
+当前 Render 环境变量暂时配置为 `CORS_ALLOWED_ORIGINS=*`，用于没有前端时开放测试任意来源。正式接入前端后，建议改为明确的前端域名。
+
 前端请求示例：
 
 ```js
-const response = await fetch("http://localhost:8080/api/v1/simplify", {
+const API_BASE_URL = "https://java-formula-simplifier-service.onrender.com";
+
+const response = await fetch(`${API_BASE_URL}/api/v1/simplify`, {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
@@ -343,14 +385,21 @@ Render Dashboard 手动部署：
 7. 部署完成后访问：
 
 ```bash
-curl https://your-service.onrender.com/api/v1/health
+curl https://java-formula-simplifier-service.onrender.com/api/v1/health
 ```
 
 前端线上请求地址改为 Render 分配的 HTTPS 域名：
 
 ```js
-const API_BASE_URL = "https://your-service.onrender.com";
+const API_BASE_URL = "https://java-formula-simplifier-service.onrender.com";
 ```
+
+当前线上测试已验证：
+
+- `GET /api/v1/health` 返回 `{"status":"UP"}`。
+- `POST /api/v1/simplify` 支持普通表达式、普通函数、递推函数和求导。
+- 缺少 `expression` 时返回 `400` 和结构化错误 JSON。
+- 当前 `CORS_ALLOWED_ORIGINS=*` 时，预检请求返回 `Access-Control-Allow-Origin: *`。
 
 ## 当前限制
 
